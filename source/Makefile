@@ -1,5 +1,6 @@
 TARGET=kernel
 ARM=arm-none-eabi
+PLATFORM?=RPI
 
 INCLUDE=include
 STLIBS=-L./lib -L./bcm2836 -L./mm -L./test -L./fs -L./sys -ltest -lsys -lfs -lmem -lbcm2836 -lsys -lbarebone -lbcm2836 -lgcc
@@ -26,8 +27,7 @@ $(TARGET): kernel.o boot.o
 	mv $(TARGET).bin ../kernel/kernel7.img
 
 kernel.o: kernel.c 
-	$(CC) $(CC_FLAGS) -I$(INCLUDE) -c $^ -o $@ -O2 -Wall -Wextra -lgcc
-
+	$(CC) $(CC_FLAGS) -I$(INCLUDE) -c $^ -o $@ -O2 -Wall -Wextra -lgcc -D$(PLATFORM)
 boot.o: boot.S
 	$(AS) $(AS_FLAGS) -c $^ -o $@
 

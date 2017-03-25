@@ -22,12 +22,11 @@
 
 #include <stddef.h>
 #include <stdint.h>
- 
-#include "bcm2836/mmio.h"
-#include "bcm2836/delay.h"
-#include "bcm2836/gpio.h"
-#include "bcm2836/uart.h"
-#include "bcm2836/interrupt.h"
+
+#ifdef RPI
+        #include "bcm2836/platform.h"
+#endif
+
 #include "sys/kthread.h"
 #include "mm/heap.h"
 
@@ -51,7 +50,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
         char hex[9] = {};
         phys_area_list new_heap;
-
+        board_init();
 	uart_init();
 	kprint("Hello, kernel world.\r\n"
                "Kernel start in %p\r\n"

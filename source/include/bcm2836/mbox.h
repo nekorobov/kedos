@@ -39,6 +39,11 @@ void mbox_write(uint8_t chan, uint32_t data);
 
 void mbox_flush();
 
+
+#define MAILBOX_FULL    0x80000000
+#define MAILBOX_EMPTY   0x40000000
+#define MBX_TAG_GET_BOARD_MODEL 0x00010001
+#define MBX_TAG_GET_BOARD_REVISION 0x00010002
 // Timers interrupt control registers
 #define CORE0_TIMER_IRQCNTL  0x40000040
 #define CORE1_TIMER_IRQCNTL  0x40000044

@@ -35,7 +35,7 @@
 
 #define THREAD_PAGE_COUNT 1
 #define BASE_FREQ 1000000000
-#define RPI2
+//#define RPI2
 
 typedef uint32_t        reg_t;
 typedef uint32_t        aptr_t;
