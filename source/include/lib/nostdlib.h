@@ -6,7 +6,7 @@
 #include "error.h"
 #include "../bcm2836/defines.h"
 #include "../bcm2836/flags.h"
-#include "../lib/ringbuffer.h"
+#include "../lib/msgrbuf.h"
 #include "../lib/string.h"
 
 //#define DEBUG

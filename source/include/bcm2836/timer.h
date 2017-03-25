@@ -24,6 +24,11 @@ void usleep(usec_t us);
 void sys_timer_init();
 struct bcm2836_sys_timer* get_sys_timer();
 
+static inline void ssleep (usec_t us) {
+	while (us--) {
+	}
+}
+
 #define timeout_wait(cond, us) \
 do {\
         volatile uint32_t ts = sys_timer->counter_lo;\

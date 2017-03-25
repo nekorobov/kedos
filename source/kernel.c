@@ -64,7 +64,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
 	mem_test();
     	heap_test();
-		res_table_init();
+	res_table_init();
     	hardware_init();
 
 /********************************************************************/
@@ -98,7 +98,8 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 	//timer_test();
 	//lib_test(); 
 	//rbuffer_test();	
-	thread_test();
+	//thread_test();
+	demonstrate();
 
 /********************************************************************/
 
@@ -121,10 +122,10 @@ static void __attribute__((naked())) kernel (void) {
 void __attribute__((naked())) kernel_entry(void) {
 	_disable_interrupts();
 	asm volatile ( 	"str %%sp, [%0]\t\n"
-					"mov %%sp, %1\t\n"
-					"mov %%r0, %2\t\n"
-					"bx %%r0\t\n" :: "r"(&cur_thread->stack_pointer), 
-					"r"(node_head_prev(thread_head)->stack_pointer), 
-					"r"(kernel): "%r0", "%sp", "memory");
+			"mov %%sp, %1\t\n"
+			"mov %%r0, %2\t\n"
+			"bx %%r0\t\n" :: "r"(&cur_thread->stack_pointer), 
+			"r"(node_head_prev(thread_head)->stack_pointer), 
+			"r"(kernel): "%r0", "%sp", "memory");
 }
 

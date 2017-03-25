@@ -432,6 +432,8 @@ number:
 #undef PCHAR
 }
 
+extern void _disable_interrupts();
+extern void _enable_interrupts();
 void
 kprint(const char *fmt, ...)
 {

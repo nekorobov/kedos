@@ -25,12 +25,11 @@
 //0x3F000000 - 0x3FFFFFFF : Hardware mapping
 /****************************************************************************/
 
-#define TIMER_RATE 1000000
+#define TIMER_RATE 10000
 
 #define ARCH_BITS 32
 #define REGS_NUM  16
 #define CORES_NUM 4
-#define RING_BUFFER_SIZE 32
 
 #define KERNEL_MSGBUF_SIZE 256
 
@@ -38,13 +37,13 @@
 #define BASE_FREQ 1000000000
 #define RPI2
 
-typedef uint32_t reg_t;
-typedef uint32_t aptr_t;
-typedef uint8_t byte;
-typedef uint16_t word;
-typedef uint32_t dword;
-typedef uint32_t pid_t;
-typedef uint8_t sflag_t;
+typedef uint32_t        reg_t;
+typedef uint32_t        aptr_t;
+typedef uint8_t         byte;
+typedef uint16_t        word;
+typedef uint32_t        dword;
+typedef uint32_t        pid_t;
+typedef uint8_t         sflag_t;
 
 int hardware_init();
 

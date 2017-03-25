@@ -47,4 +47,6 @@ int sd_test();
 
 void data_message_dump(void* data);
 
+int demonstrate();
+
 #endif

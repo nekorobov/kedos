@@ -21,10 +21,8 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_vector(void)
   	kprint ("undef instruction vector\r\n");
 }
 
-
 void  __attribute__ ((interrupt ("IRQ"))) irq_handler(void) 
 {
-	//kprint ("IRQ\r\n");
 	sys_timer->compare1 = sys_timer->counter_lo + TIMER_RATE;
 	sys_timer->control_status = ~0;	
 	thread_exit();
@@ -37,7 +35,6 @@ void __attribute__((interrupt("SWI"))) software_handler(void)
 	void* param2;
 	int retv = -1;
 	SWI_PROCESSING (swi_num, param1, param2);
-
 	switch (swi_num) {
 		case 0:
 		  	retv = k_send (param2);

@@ -1,7 +1,7 @@
 #include "sys/kscheduler.h"
 
 void kscheduler() {
-	if ((*res_table_get())->pid == 0) {
+	if ((*res_table_get())->pid == GET_KERNEL_THREAD()->pid) {
 		if (cur_thread->state == ACTIVE)
 			cur_thread->state = WAIT;
 		if (cur_thread->state == BLOCKED) {
