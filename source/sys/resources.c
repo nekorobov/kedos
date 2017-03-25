@@ -138,7 +138,6 @@ int res_get (res_type_t res, pid_t src, sflag_t flag) {
 #ifdef DEBUG
 		kprint ("Get: Can't get resources with WAITFROM and NONBLOCK at the same time\r\n");
 #endif
-
 		return -EINVAL;
 	}
 
@@ -183,10 +182,11 @@ int res_give (int rd, pid_t dest, sflag_t flag) {
 	res_unit* ures;
 	pid_t to;
 	pid_t wait;
-	msg_t* msg;
+	msg_t msg;
+        msg_t* retp;
 
-    if (!(res_table != NULL && rd < RES_TABLE_SIZE)) 
-    	return -EINVAL;
+        if (!(res_table != NULL && rd < RES_TABLE_SIZE)) 
+    	        return -EINVAL;
  
 	ures = res_table[rd];
 
@@ -220,39 +220,30 @@ int res_give (int rd, pid_t dest, sflag_t flag) {
 
 	if ((flag & R_SENDTO) != 0) {
 		do {
-			msg = find_msg (GET_KERNEL_THREAD()->buffer, MSG_GET_TYPE, ures->type, to);
-			kprint ("here %x\r\n", msg);
-			if (msg == NULL) {
+			retp = find_msg (GET_KERNEL_THREAD()->buffer, MSG_GET_TYPE, ures->type, to, &msg);
+			kprint ("here %x\r\n", retp);
+			if (retp == NULL) {
 				cur_thread->state = BLOCKED;
 				thread_exit_shell();
 			}
-		} while (msg == NULL);
+		} while (retp == NULL);
 
 	} else {
 		do {
-			msg = find_msg (GET_KERNEL_THREAD()->buffer, MSG_GET_TYPE, ures->type, 0);
-			if (msg != NULL) {
-				wait = msg->sender;
-				kthread* receiver = find_thread_pid (to);
-		
-				if (receiver == NULL) {
-#ifdef DEBUG
-					kprint ("Give: There are no thread with %d pid\r\n", to);
-#endif	
-					return -EINVAL;
-				}
+			retp = find_msg (GET_KERNEL_THREAD()->buffer, MSG_GET_TYPE, ures->type, GET_KERNEL_THREAD()->pid, &msg);
+			if (retp != NULL) {
+				wait = msg.sender;
 
 				if (receiver->state == BLOCKED) {
 					receiver->state = WAIT;
 					active_add_tail (th_active_head, receiver);
 					break;
 				}
-			
 			}
-		} while (msg != NULL);
+		} while (retp != NULL);
 
 		ures->pid = GET_KERNEL_THREAD()->pid;
-	}
+        }
 
 	if (receiver->state == BLOCKED) {
 		receiver->state = WAIT;

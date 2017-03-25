@@ -1,5 +1,4 @@
 #include "sys/kthread.h"
-#include "lib/nostdlib.h"
 
 kthread* cur_thread = NULL;
 node_head* thread_head = NULL;
@@ -21,7 +20,7 @@ static kthread* kthread_init (sflag_t flags, pid_t pid, void* func, enum schedul
 	thread->flags = flags; 
 	thread->pid = pid;
 	thread->stack_pointer = (reg_t) phys_page_alloc (THREAD_PAGE_COUNT, pid) 
-												+ PAGE_SIZE - sizeof(dword);
+                        + PAGE_SIZE - sizeof(dword);
 	
 	//For protection from corruption next memory page
 
@@ -34,7 +33,7 @@ static kthread* kthread_init (sflag_t flags, pid_t pid, void* func, enum schedul
 	}
 
 	thread->stack_base = thread->stack_pointer;	
-	thread->buffer = create_rbuffer (RBUFFER_IS_UNDER_PROTECTION, RING_BUFFER_SIZE);
+	thread->buffer = create_rbuffer (0, RING_BUFFER_SIZE);
 
 	if (thread->buffer == NULL) {
 #ifdef DEBUG
@@ -53,14 +52,14 @@ static kthread* kthread_init (sflag_t flags, pid_t pid, void* func, enum schedul
 		cur_thread = thread;
 
 	asm volatile (	"mov %%r1, %%sp\t\n"
-					"mov %%sp, %0\t\n"
-					"mov %%r0, %1\t\n"
-					"push {%%r0-%%r11}\t\n"
-					"push {%%r0}\t\n"
-					"mrs %%r0, cpsr\t\n"
-					"push {%%r0}\t\n" 
-					"mov %%sp, %%r1\t\n"
-					::"r"(thread->stack_base), "r"(thread->program_counter): "memory", "%r0", "%r1", "%sp");
+			"mov %%sp, %0\t\n"
+			"mov %%r0, %1\t\n"
+			"push {%%r0-%%r11}\t\n"
+			"push {%%r0}\t\n"
+			"mrs %%r0, cpsr\t\n"
+			"push {%%r0}\t\n" 
+			"mov %%sp, %%r1\t\n"
+			::"r"(thread->stack_base), "r"(thread->program_counter): "memory", "%r0", "%r1", "%sp");
 
 	thread->stack_pointer -= 14 * ARCH_BITS / 8;
 	return thread;
